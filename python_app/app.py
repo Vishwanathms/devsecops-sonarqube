@@ -49,6 +49,10 @@ def unused_function():
     x = "This function is never called"
     return x
 
+# Unused Code
+def unused_function1():
+    x = "This function is never called"
+    return x
 
 @app.route('/debug')
 def debug():
