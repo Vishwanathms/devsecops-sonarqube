@@ -49,15 +49,18 @@ def unused_function():
     x = "This function is never called"
     return x
 
-# Unused Code
-def unused_function1():
-    x = "This function is never called"
-    return x
+@app.route("/unsafe")
+def unsafe():
+    # ❌ Command Injection vulnerability
+    cmd = request.args.get("cmd")
+    output = subprocess.check_output(cmd, shell=True)  # BAD: unsanitized input
+    return jsonify({"output": output.decode()})
 
-@app.route('/debug')
-def debug():
-    import os
-    return jsonify({"env": dict(os.environ)})
+@app.route("/hardcoded_secret")
+def secret():
+    # ❌ Hardcoded secret / credential
+    api_key = "ABCD1234XYZ9876SECRET"
+    return jsonify({"api_key": api_key})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
